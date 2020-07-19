@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大猫咪管理系统</title>
+  <link rel="stylesheet" href="../css/basic.css">
+  <link rel="stylesheet" href="../css/list.css">
+</head>
+
+<body>
+  <div id="root" class="flex-column">
+    <header class="flex-center">
+      <h2>大猫咪管理系统</h2>
+    </header>
+    <main class="flex-center-x">
+      <div class="table flex-column" id="table">
+      </div>
+    </main>
+    <footer>
+      <p> made by mrpanda</p>
+    </footer>
+  </div>
+</body>
+<script src="../js/ajax.js"></script>
+<script>
+  const table = document.getElementById('table');
+
+  const getList = () => {
+    ajax({
+      url: 'http://localhost:3000/getlist',
+      success: (res) => {
+        const {
+          code,
+          list
+        } = res;
+        if (code === 0) {
+          table.innerHTML = null;
+          const thead = document.createElement('div');
+          thead.className = "tr";
+          thead.innerHTML = `
+          <div class="th">ID</div>
+          <div class="th">姓名</div>
+          <div class="th">学号</div>
+          <div class="th">操作</div>`;
+          table.appendChild(thead);
+          list.forEach(item => {
+            const tr = document.createElement('div');
+            tr.className = "tr";
+            tr.innerHTML = `<div class="td">${item.id}</div>
+          <div class="td">${item.username}</div>
+          <div class="td">${item.number}</div>
+          <div class="td"><button class="delete" onclick="deleteItem(${item.id})">删除</button></div>`;
+            table.appendChild(tr);
+          })
+        } else {
+          alert("列表加载失败");
+        }
+      }
+    })
+  }
+
+  const deleteItem = (id) => {
+    console.log(id);
+    const con = confirm("请确认删除？");
+    if (con) {
+      ajax({
+        url: "http://localhost:3000/delete",
+        method: 'post',
+        data: {
+          id
+        },
+        success: (res) => {
+          const {
+            code,
+            msg
+          } = res;
+          if (code === 0) {
+            alert(msg);
+            getList();
+          } else {
+            alert(msg);
+          }
+        }
+      })
+    }
+  }
+
+  window.onload = () => {
+    getList();
+  }
+</script>
+
+</html>

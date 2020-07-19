@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大猫咪管理系统</title>
+  <link rel="stylesheet" href="../css/basic.css">
+  <link rel="stylesheet" href="../css/index.css">
+</head>
+
+<body>
+  <div id="root" class="flex-column">
+    <header class="flex-center">
+      <h2>大猫咪管理系统</h2>
+    </header>
+    <main class="flex-center">
+      <div class="form flex-column flex-center">
+        <div class="form-item-label flex-center">
+          <input type="text" placeholder="  Username" id="username">
+        </div>
+        <div class="form-item-label flex-center">
+          <input type="text" placeholder="  Number" id="number">
+        </div>
+        <div class="form-item-label flex-start">
+          <input type="text" placeholder="  Code" id="code">
+          <div id="code-show" class="flex-center">1234</div>
+        </div>
+        <div class="form-item-label flex-center">
+          <button class="form-button" onclick="submit()">Sign up</button>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <p> made by mrpanda</p>
+    </footer>
+  </div>
+</body>
+<script src="../js/ajax.js"></script>
+<script>
+  let rand = "";
+  const codeShow = document.getElementById('code-show');
+
+  const initCode = () => {
+    rand = "";
+    for (let i = 0; i < 4; i++) {
+      rand += Math.round(Math.random() * 9);
+    }
+    codeShow.innerHTML = rand;
+  }
+
+  const submit = () => {
+    const username = document.getElementById('username').value;
+    const number = document.getElementById('number').value;
+    const code = document.getElementById('code').value;
+    if (username === '' || number === '' || code === '' || code !== rand) {
+      alert('信息不全或有误');
+    } else {
+      ajax({
+        url: 'http://localhost:3000/signup',
+        method: 'post',
+        data: {
+          username,
+          number
+        },
+        success: (res) => {
+          const {
+            code,
+            msg
+          } = res;
+          if (code === 0) {
+            alert(msg);
+            window.open('./list.html');
+          } else {
+            alert(msg);
+          }
+        }
+      })
+    }
+  }
+
+  codeShow.onclick = () => {
+    initCode();
+  }
+
+  window.onload = () => {
+    initCode();
+  }
+</script>
+
+</html>

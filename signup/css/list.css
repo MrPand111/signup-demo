@@ -1,0 +1,42 @@
+main .table {
+  width: 1000px;
+  max-height: 550px;
+  height: auto;
+  overflow-y: auto;
+  border-left: 5px solid white;
+  border-right: 5px solid white;
+}
+
+main .table .tr {
+  width: 100%;
+  display: flex;
+}
+
+main .table .tr .th,
+main .table .tr .td {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 55px;
+  line-height: 40px;
+}
+
+main .table .tr:nth-child(odd) {
+  background: skyblue;
+}
+
+main .table .tr:nth-child(even) {
+  background: white;
+}
+
+main .table .tr:nth-child(1) {
+  background: #459ddd;
+}
+
+main .table .delete {
+  width: 80px;
+  background: red;
+  box-shadow: none;
+  height: 30px;
+}
